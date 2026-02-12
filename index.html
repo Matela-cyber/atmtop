@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple ATM App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            width: 300px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        input {
+            width: 90%;
+            padding: 8px;
+            margin: 8px 0;
+        }
+
+        button {
+            padding: 8px 12px;
+            margin: 5px;
+            cursor: pointer;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        h2 {
+            margin-bottom: 15px;
+        }
+
+        .balance {
+            font-weight: bold;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Login Section -->
+    <div id="loginSection">
+        <h2>ATM Login</h2>
+        <input type="text" id="accountNumber" placeholder="Account Number">
+        <input type="password" id="pin" placeholder="PIN">
+        <button onclick="login()">Login</button>
+        <p id="loginMessage" style="color:red;"></p>
+    </div>
+
+    <!-- ATM Section -->
+    <div id="atmSection" class="hidden">
+        <h2>ATM Menu</h2>
+        <p class="balance">Balance: M<span id="balance">1000</span></p>
+
+        <input type="number" id="amount" placeholder="Enter amount">
+
+        <div>
+            <button onclick="deposit()">Deposit</button>
+            <button onclick="withdraw()">Withdraw</button>
+        </div>
+
+        <button onclick="logout()">Logout</button>
+        <p id="atmMessage"></p>
+    </div>
+
+</div>
+
+<script>
+    // Simple account data
+    const account = {
+        accountNumber: "123456",
+        pin: "1111",
+        balance: 1000
+    };
+
+    function login() {
+        const accNum = document.getElementById("accountNumber").value;
+        const pin = document.getElementById("pin").value;
+
+        if (accNum === account.accountNumber && pin === account.pin) {
+            document.getElementById("loginSection").classList.add("hidden");
+            document.getElementById("atmSection").classList.remove("hidden");
+            document.getElementById("loginMessage").innerText = "";
+        } else {
+            document.getElementById("loginMessage").innerText = "Invalid account number or PIN";
+        }
+    }
+
+    function deposit() {
+        const amount = parseFloat(document.getElementById("amount").value);
+        if (amount > 0) {
+            account.balance += amount;
+            updateBalance();
+            showMessage("Deposit successful");
+        } else {
+            showMessage("Enter valid amount");
+        }
+    }
+
+    function withdraw() {
+        const amount = parseFloat(document.getElementById("amount").value);
+        if (amount > 0 && amount <= account.balance) {
+            account.balance -= amount;
+            updateBalance();
+            showMessage("Withdrawal successful");
+        } else {
+            showMessage("Insufficient funds or invalid amount");
+        }
+    }
+
+    function updateBalance() {
+        document.getElementById("balance").innerText = account.balance;
+        document.getElementById("amount").value = "";
+    }
+
+    function showMessage(message) {
+        document.getElementById("atmMessage").innerText = message;
+    }
+
+    function logout() {
+        document.getElementById("atmSection").classList.add("hidden");
+        document.getElementById("loginSection").classList.remove("hidden");
+        document.getElementById("accountNumber").value = "";
+        document.getElementById("pin").value = "";
+        document.getElementById("atmMessage").innerText = "";
+    }
+</script>
+
+</body>
+</html>
